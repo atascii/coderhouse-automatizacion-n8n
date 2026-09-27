@@ -149,7 +149,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.5,
       "position": [
-        736,
+        800,
         368
       ],
       "id": "ee6d8674-f5ac-4533-ac7e-8075f1d8dc9f",
@@ -299,7 +299,7 @@
               "display": true,
               "type": "array",
               "readOnly": false,
-              "removed": false
+              "removed": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -320,8 +320,7 @@
           "id": "xhA4KoAzrsBdGHkD",
           "name": "Airtable account"
         }
-      },
-      "disabled": true
+      }
     },
     {
       "parameters": {
@@ -408,7 +407,7 @@
               "display": true,
               "type": "string",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Cliente",
@@ -463,7 +462,7 @@
               "display": true,
               "type": "number",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Tipo de Equipo",
@@ -496,7 +495,7 @@
                 }
               ],
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Uso Principal",
@@ -507,7 +506,7 @@
               "display": true,
               "type": "string",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Software",
@@ -518,7 +517,7 @@
               "display": true,
               "type": "string",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Resumen IA",
@@ -529,7 +528,7 @@
               "display": true,
               "type": "string",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Respuesta Propuesta IA",
@@ -540,7 +539,7 @@
               "display": true,
               "type": "string",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Productos Propuestos",
@@ -622,7 +621,7 @@
               "display": true,
               "type": "string",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Fecha Creación",
@@ -633,7 +632,7 @@
               "display": true,
               "type": "dateTime",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Fecha Actualización",
@@ -644,7 +643,7 @@
               "display": true,
               "type": "dateTime",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Logs de Solicitud",
@@ -2659,8 +2658,7 @@
           "mappingMode": "defineBelow",
           "value": {
             "Solicitud": "={{ [ $('07 - Airtable | Crear solicitud').item.json.id ] }}",
-            "Nodo": "08 - OpenAI | Analizar solicitud",
-            "Tipo": "=ERROR",
+            "Tipo": "ERROR",
             "Mensaje": "={{ $json.error }}"
           },
           "matchingColumns": [],
@@ -2674,7 +2672,7 @@
               "display": true,
               "type": "string",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Solicitud",
@@ -2697,16 +2695,16 @@
               "type": "options",
               "options": [
                 {
-                  "name": "Cambio de estado",
-                  "value": "Cambio de estado"
+                  "name": "INFO",
+                  "value": "INFO"
                 },
                 {
-                  "name": "Mensaje automático",
-                  "value": "Mensaje automático"
+                  "name": "WARNING",
+                  "value": "WARNING"
                 },
                 {
-                  "name": "Otro",
-                  "value": "Otro"
+                  "name": "ERROR",
+                  "value": "ERROR"
                 }
               ],
               "readOnly": false,
@@ -2732,7 +2730,7 @@
               "display": true,
               "type": "string",
               "readOnly": false,
-              "removed": false
+              "removed": true
             },
             {
               "id": "Fecha",
@@ -2743,7 +2741,7 @@
               "display": true,
               "type": "dateTime",
               "readOnly": false,
-              "removed": false
+              "removed": true
             }
           ],
           "attemptToConvertTypes": false,
@@ -4069,6 +4067,177 @@
           "name": "Gmail account"
         }
       }
+    },
+    {
+      "parameters": {
+        "content": "El workflow se dispara únicamente con emails cuyo asunto coincide con la solicitud de cotización.\n\nDatos relevantes recuperados:\n- Message ID\n- Thread ID\n- From\n- Subject\n- Message\n\nEl Thread ID se conserva para responder posteriormente en el mismo hilo.",
+        "height": 288,
+        "width": 336
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -144,
+        -320
+      ],
+      "typeVersion": 1,
+      "id": "2db6c17e-c9c0-44cd-b858-b2260bea2483",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Se validan únicamente los datos mínimos de entrada:\n- email del remitente\n- mensaje\n\nSi falta alguno, el flujo no consume IA y registra un WARNING en Airtable.",
+        "height": 176
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        448,
+        160
+      ],
+      "typeVersion": 1,
+      "id": "f6cc3c70-8aa3-4c82-a9c4-8235a4b44a6e",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "Se busca al cliente por email para evitar duplicados.\n\nSi existe:\n→ se reutiliza el registro.\n\nSi no existe:\n→ se crea automáticamente y se continúa con el nuevo Record ID.",
+        "height": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        752,
+        80
+      ],
+      "typeVersion": 1,
+      "id": "1a65a748-a930-461c-9457-73c7fb553c59",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "GPT-5 Mini extrae información estructurada de la solicitud.\n\nSalida esperada:\n- datos_completos\n- presupuesto\n- tipo_equipo\n- uso_principal\n- software\n- datos_faltantes\n- resumen\n\nLa respuesta debe ser JSON válido.",
+        "height": 288,
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1952,
+        -224
+      ],
+      "typeVersion": 1,
+      "id": "d5deb7bb-7d24-466c-82c3-fbbefd9be54c",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "La respuesta de OpenAI se parsea dentro de try/catch.\n\nSi el JSON es inválido:\n→ parse_ok = false\n→ se registra ERROR en Logs\n→ la solicitud pasa a Estado = Error\n\nEsto evita fallos no controlados.",
+        "height": 208
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2272,
+        288
+      ],
+      "typeVersion": 1,
+      "id": "a6b6d3a4-7210-4cc8-9fe3-4a33c86b2873",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "Si faltan datos obligatorios, no se genera una propuesta.\n\nRuta incompleta:\n→ Estado = Datos incompletos\n→ Gmail solicita información adicional\n→ termina la ejecución\n\nEsto reduce costo y evita cotizaciones incorrectas.",
+        "height": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3104,
+        -192
+      ],
+      "typeVersion": 1,
+      "id": "7ff98ebf-20ef-4479-89d6-a0cb778410da",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "Solo se envían a la IA productos:\n- activos\n- con stock\n\nEl catálogo se agrupa antes de enviarlo a OpenAI para reducir contexto y evitar productos inválidos.",
+        "height": 192
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3408,
+        -256
+      ],
+      "typeVersion": 1,
+      "id": "b0467520-1732-4c38-9c1f-dc47a5373ec0",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "GPT-5 Mini genera la propuesta utilizando exclusivamente productos del catálogo recibido.\n\nReglas:\n- no inventar productos\n- no modificar precios\n- respetar el presupuesto\n- devolver JSON estructurado",
+        "height": 208
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        3904,
+        -272
+      ],
+      "typeVersion": 1,
+      "id": "9ab057b7-a3aa-4490-9353-db0f6caa7cc3",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "Se guarda en Airtable:\n- productos propuestos\n- precio total\n- respuesta de IA\n- Estado = Esperando aprobación\n\nDesde este punto la propuesta existe, pero todavía NO se envía al cliente.",
+        "height": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4688,
+        -336
+      ],
+      "typeVersion": 1,
+      "id": "7b100ad9-04d8-44b8-b1b1-28f65d7fd875",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "Punto crítico del flujo.\n\nLa propuesta se envía a un aprobador humano y n8n queda detenido mediante Wait.\n\nOpciones:\n- Aprobar\n- Rechazar\n\nLa cotización nunca se envía automáticamente al cliente.",
+        "height": 224
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4960,
+        -336
+      ],
+      "typeVersion": 1,
+      "id": "b0bc9ad2-eb5e-4430-9398-8eb21a9e0b60",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "approved:\n→ Estado = Aprobado por Humano\n→ responder al cliente\n→ Estado = Cotización enviada\n\nrejected:\n→ Estado = Rechazado por Humano\n→ no se envía la propuesta",
+        "height": 208
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        5344,
+        -336
+      ],
+      "typeVersion": 1,
+      "id": "686744ed-81a0-451b-960b-a57fa36e1914",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "content": "Los errores y eventos inválidos se registran en Airtable Logs.\n\nTipos utilizados:\n- WARNING\n- ERROR\n\nSe registra:\n- solicitud\n- tipo\n- mensaje\n- nodo\n- fecha\n\nLas solicitudes afectadas pasan a Estado = Error cuando corresponde.",
+        "height": 320,
+        "width": 368
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2752,
+        480
+      ],
+      "typeVersion": 1,
+      "id": "36b1c24c-949f-403c-9e60-7bd01b43d565",
+      "name": "Sticky Note11"
     }
   ],
   "pinData": {},
@@ -4435,12 +4604,12 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "00cde152-fcf6-490b-bdb6-6c783de4f91a",
+  "versionId": "58eeb5d2-5d4e-45e3-aece-5ac26dfdebb9",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "31bd0ca65b37c23f1dcf0614d9ceb3f1b1f9fa15434cc152d7f91f45f391d7c3"
